@@ -8,12 +8,19 @@ class DB {
     private $_error = false;
     private $_count = 0;
 
-    public function __construct($host, $root, $pass, $port) {
+    public function __construct() {
 
         try {
-
+            $this->_pdo = new PDO('mysql:host='.Config::get('mysql/host').';dbname='.Config::get('mysql/db'), Config::get('mysql/username'), Config::get('mysql/password'));
         } catch(PDOException $e) {
             die($e->getMessage());
         }
+    }
+
+    public static function getInstance() {
+        if(!isset(self::$_instance)) {
+            self::$_instance = new DB();
+        }
+        return self::$_instance;
     }
 }
